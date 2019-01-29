@@ -1,2 +1,2 @@
 # one-and-day
-The great project of one day old.
+This is the great project of one day old.

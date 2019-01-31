@@ -17,32 +17,35 @@ export default {
 <style lang="less">
 @media screen and (min-width: 1281px) {
     .home-page{
-        width: 1200px;
+        width: 1000px;
     }
 }
 @media screen and (max-width: 1280px) {
     .home-page{
-        width: 1200px;
+        width: 1000px;
     }
 }
 @media screen and (max-width: 1024px) {
     .home-page{
-        width: 1000px;
+        width: 800px;
     }   
 }
 @media screen and (max-width: 968px) {
     .home-page{
-        width: 900px;
+        width: 750px;
     }   
 }
 @media screen and (max-width: 768px) {
     .home-page{
-        width: 700px;
+        width: 100%;
+        .member-list{
+            display: none;
+        }
     }  
 }
 @media screen and (max-width: 500px) {
     .home-page{
-        width: 500px;
+        width: 100%;
     }  
 }
 .home-page {
@@ -52,15 +55,17 @@ export default {
     flex-flow: column nowrap;
     align-items: center;
     .home-page__header{
-        height: 60px;
+        height: 100px;
         width: 100%;
         text-align: center;
         background: red;
+        margin-bottom: 10px;
+        border-radius: 10px;
     }
     .home-page__content{
         width: 100%;
-        height: calc(100% - 60px);
-        background-color: #7d7d7d;
+        height: calc(100% - 130px);
+        background-color:#fff;
         display: flex;
         .member-list{
             flex-shrink: 0;

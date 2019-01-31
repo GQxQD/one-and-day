@@ -14,6 +14,7 @@ html{
   overflow: hidden;
   body {
     height: 100%;
+    padding-bottom: 20px;
     overflow: hidden;
   }
 }

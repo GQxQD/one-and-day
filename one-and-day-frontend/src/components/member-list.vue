@@ -23,6 +23,11 @@ export default {
 
 .member-list{
     width: 15%;
+    height: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    margin-right: 15px;
+    box-shadow: 0px 0px 10px #999999;
     .member-list__item{
         display: flex;
         height: 30px;

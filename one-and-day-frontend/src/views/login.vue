@@ -34,14 +34,19 @@ export default {
 .login-page{
     width: 100%;
     height: 100%;
-    background-color: #7d7d7d;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
+	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+    background-size: 400% 400%;
+	animation: Gradient 15s ease infinite;
     .login__box{
         width: 400px;
         height: 250px;
-        background-color: aqua;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.5);
+
         .login__box__header{
             height: 60px;
             line-height: 60px;
@@ -70,13 +75,25 @@ export default {
             height: 70px;
             text-align: center;
             .el-button{
+                border:none;
                 width: 250px;
-                background-color: green;
+                background:rgba(64, 158,250, 0.5);
                 padding: 0;
                 height: 30px;
             }
         }
     }
+    @keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
 }
 
 </style>

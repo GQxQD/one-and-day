@@ -1,0 +1,20 @@
+.point-green{
+  width: 5px;
+  height: 5px;
+  margin-right: 5px;
+  border-radius: 100%;
+  background-color: green;
+}
+@mixin font-size($size) {
+  @media (min-width: 1440px) {
+    font-size: $size + px;
+  }
+}
+
+@mixin oad-width {
+  
+}
+
+@mixin oad-height {
+  
+}

@@ -11,8 +11,6 @@
     "compass": "^0.1.1",
     "compass-mixins": "^0.12.10",
     "element-ui": "^2.5.2",
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

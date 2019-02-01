@@ -1,9 +1,11 @@
 <template>
     <div class="home-page">
         <div class="home-page__header"></div>
+        <label for="toggle-input" class="toggle-button"></label> <input type="checkbox" id="toggle-input">
         <div class="home-page__content">
             <member-list/>
             <game-area/>
+            <div class='home-page__mask'></div>
         </div>
     </div>
 </template>
@@ -11,7 +13,12 @@
 import memberList from "../components/member-list.vue"
 import gameArea from "../components/game-area.vue"
 export default {
-    components: {memberList, gameArea}
+    components: {memberList, gameArea},
+    data(){
+        return{
+
+        }
+    }
 }
 </script>
 <style lang="less">
@@ -41,19 +48,51 @@ export default {
         .member-list{
             display: none;
         }
-    }  
-}
-@media screen and (max-width: 500px) {
-    .home-page{
-        width: 100%;
+        .toggle-button{
+            z-index: 1000;
+            display: block !important;
+            background-color: @primary-background;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            left: 0;
+            top: 80px;
+        }
+        #toggle-input:not(checked) ~ .home-page__content{
+            .member-list{display: none;}
+        }
+        #toggle-input:checked ~ .home-page__content{
+            .member-list{
+                z-index: 1000;
+                width: 150px;
+                background-color: #fff;
+                display: block;
+                margin: 0;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .home-page__mask{
+                z-index: 100;
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0,0, 0.2) 
+            }
+        }
     }  
 }
 .home-page {
+    position: relative;
     height: 100%;
     margin: 0 auto;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+    .togglt-button{display: none;}
+    #toggle-input{display: none;}
     .home-page__header{
         height: 100px;
         width: 100%;
@@ -63,6 +102,7 @@ export default {
         border-radius: 10px;
     }
     .home-page__content{
+        position: relative;
         width: 100%;
         height: calc(100% - 130px);
         background-color:#fff;

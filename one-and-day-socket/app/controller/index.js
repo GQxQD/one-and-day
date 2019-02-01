@@ -3,6 +3,7 @@ module.exports = {
     // 用户连接
     connected() {
         console.log('用户连接：', this.id);
+        this.broadcast.emit('MESSAGE', this.id + ' 连接了');
     },
 
     login(data, cb) {
@@ -12,12 +13,13 @@ module.exports = {
 
     MESSAGE(data) {
         console.log(data);
-        this.nsp.emit('MESSAGE', this.id + '  进来了')
-        // this.emit('MESSAGE', data);
+        this.broadcast.emit('MESSAGE', this.id + ': ' + data);
+        this.emit('MESSAGE', data);
     },
 
     disconnect() {
         console.log('用户退出：');
+        this.broadcast.emit('MESSAGE', this.id + ' 退出了');
     },
 };
 

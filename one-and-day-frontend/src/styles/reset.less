@@ -1,0 +1,50 @@
+.theme( @primary-background: #f45a8d){
+    .primaryback-ground{
+        background-color: @primary-background;
+    }
+    .el-button{
+        color: #fff;
+        border: none;
+        padding: 0;
+        opacity: 0.8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: @primary-background;
+        &:focus{
+            color: #fff;
+            opacity: 1.1;
+            border: none; 
+            background-color: @primary-background;
+        }
+        &:hover{
+            color: #fff;
+            opacity: 0.9;
+            border: none;
+            background-color: @primary-background;
+        }
+        &:active{
+            color: #fff;
+            opacity: 0.8;
+            border:none; 
+            background-color: @primary-background;
+        }
+    }
+    .el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover{
+        color: #fff;
+        background-color: @primary-background;
+        opacity: 0.5;
+    }
+    
+    .el-input{
+        &:focus{
+            outline-color: @primary-background;
+        }
+        .el-input__inner{
+            &:focus{
+                border-color: @primary-background;
+            }
+        }
+    }
+    
+}

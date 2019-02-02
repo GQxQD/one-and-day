@@ -31,16 +31,16 @@ export default {
 }
 </script>
 <style lang="less">
+
 .login-page{
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-    background-size: 400% 400%;
-	animation: Gradient 15s ease infinite;
+    background-image: url('../assets/login.png'); 
+    background-repeat:no-repeat;
+    background-position: center;
     .login__box{
         width: 400px;
         height: 250px;
@@ -73,27 +73,17 @@ export default {
         }
         .login__box__button{
             height: 70px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
             .el-button{
-                border:none;
                 width: 250px;
-                background:rgba(64, 158,250, 0.5);
-                padding: 0;
+                background:#ff3300;
+                opacity: 0.5;
                 height: 30px;
             }
         }
     }
-    @keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
-}
+ 
 }
 
 </style>

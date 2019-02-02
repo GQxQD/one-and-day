@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="app">
+    <div id="app" class="app theme-pink">
         <router-view/>
     </div>
 </template>
@@ -14,8 +14,8 @@ html {
     height: 100%;
     overflow: hidden;
     body {
+        margin: 0;
         height: 100%;
-        padding-bottom: 20px;
         overflow: hidden;
     }
 }

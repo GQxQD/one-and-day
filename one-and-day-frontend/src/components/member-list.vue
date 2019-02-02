@@ -3,7 +3,7 @@
         <div class="member-list__item" v-for="(user,index) in list" :key="index">
             <div class="point-green"></div>
             <span>{{user.name}}</span>
-            <span>{{user.level}}</span>
+            <!-- <span>{{user.level}}</span> -->
         </div>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
 <style lang="less">
 
 .member-list{
-    width: 15%;
+    width: 25%;
     height: 100%;
     border: 1px solid #d9d9d9;
     border-radius: 5px;

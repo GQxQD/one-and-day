@@ -1,7 +1,10 @@
 <template>
     <div class="home-page">
         <div class="home-page__header"></div>
-        <label for="toggle-input" class="toggle-button"></label> <input type="checkbox" id="toggle-input">
+        <label for="toggle-input" class="toggle-button primaryback-ground">
+            成员列表
+        </label>
+        <input type="checkbox" id="toggle-input">
         <div class="home-page__content">
             <member-list/>
             <game-area/>
@@ -49,10 +52,10 @@ export default {
             display: none;
         }
         .toggle-button{
+            font-size: 14px;
             z-index: 1000;
             display: block !important;
-            background-color: @primary-background;
-            width: 20px;
+            width: 60px;
             height: 20px;
             position: absolute;
             left: 0;
@@ -91,7 +94,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    .togglt-button{display: none;}
+    .toggle-button{display: none;}
     #toggle-input{display: none;}
     .home-page__header{
         height: 100px;

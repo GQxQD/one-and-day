@@ -4,12 +4,19 @@
             <!-- todo   显示窗口 -->
         </div>
         <div class="game-area__operation">
+            <div class="game-area__operation__primary">
+                <el-button class="primary-color-pink" @click="changePrimary('pink')">B站粉</el-button>
+                <el-button class="primary-color-red" @click="changePrimary('red')">新年红</el-button>
+                <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button>
+            </div>
             <div class="game-area__operation__input">
-                <el-input v-model="text"/> <el-button @click="send" :disabled="inputStatus">发送</el-button>    
+                <!-- :disabled="inputStatus" -->
+                <el-input v-model="text"/> <el-button  @click="send" >发送</el-button>    
             </div>
             <div class="game-area__operation__button">
                 <el-button  v-for="(action,index) in this.operation" :key="index" 
-                            @click="operationSelect(action.key)" 
+                            @click="operationSelect(action.key)"
+                            :class="index ? 'ml20': 'ml0'"
                             :disabled="buttonStatus">
                     {{action.text}}
                 </el-button>
@@ -88,6 +95,10 @@ export default {
         operationSelect(val){
             // 发送选择
             console.log(val)
+        },
+        // 更换主题色
+        changePrimary(name){
+            document.getElementById('app').className = 'app' + ' ' +'theme-' + name;
         }
     }
 }
@@ -110,29 +121,44 @@ export default {
             border: 1px solid #d9d9d9;
             border-radius: 5px;
             box-shadow: 0px 0px 10px #999999;
+            .game-area__operation__primary{
+                margin-top: 10px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .el-button{
+                    width: 60px;
+                    height: 30px;
+                }
+            }
             .game-area__operation__input{
-                width: 100%;
+                margin-top: 15px;
                 display: flex;
                 justify-content: center;
                 .el-input{
+                    height: 30px;
                     width:60%;
+                    .el-input__inner{
+                        height: 30px;
+                        line-height: 30px;
+                    }
                 }
                 .el-button{
+                    width: 60px;
+                    height: 30px;
                     margin-left: 10px;
-                    &:focus{
-                        color: #606266;
-                        border-color: #dcdfe6;
-                        background-color: #fff;
-                    }
                 }
             }
             .game-area__operation__button{
-                margin-top: 10px;
+                margin-top: 15px;
                 width: 100%;
                 display: flex;
                 justify-content: center;
                 .el-button{
-                    width: 100px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 100%;
                 }
             }
         }

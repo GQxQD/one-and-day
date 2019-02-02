@@ -1,6 +1,8 @@
 <template>
     <div class="home-page">
-        <div class="home-page__header"></div>
+        <div class="home-page__header">
+            <img src="../assets/header.jpg" alt="">
+        </div>
         <label for="toggle-input" class="toggle-button primaryback-ground">
             成员列表
         </label>
@@ -68,7 +70,6 @@ export default {
             .member-list{
                 z-index: 1000;
                 width: 150px;
-                background-color: #fff;
                 display: block;
                 margin: 0;
                 position: absolute;
@@ -100,9 +101,11 @@ export default {
         height: 100px;
         width: 100%;
         text-align: center;
-        background: red;
-        margin-bottom: 10px;
-        border-radius: 10px;
+        background: #fff;
+        img{
+            height: 100%;
+            width: 100%;
+        }
     }
     .home-page__content{
         position: relative;

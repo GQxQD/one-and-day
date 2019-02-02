@@ -24,7 +24,6 @@ export default {
     },
     methods:{
         login(){
-            this.$message('adfasdfasfasdf');
             this.$router.replace({name: 'home'})
         }
     }

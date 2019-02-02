@@ -1,6 +1,7 @@
 .theme( @primary-background: #f45a8d){
     .primaryback-ground{
         background-color: @primary-background;
+        opacity: 0.8;
     }
     .el-button{
         color: #fff;
@@ -46,5 +47,15 @@
             }
         }
     }
-    
+        
+    .el-textarea{
+        &:focus{
+            outline-color: @primary-background;
+        }
+        .el-textarea__inner{
+            &:focus{
+                border-color: @primary-background;
+            }
+        }
+    }
 }

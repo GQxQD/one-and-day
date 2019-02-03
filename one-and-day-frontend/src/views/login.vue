@@ -3,8 +3,6 @@
         <div class="login__box">
             <div class="login__box__header">一日旧</div>
             <div class="login__box__content">
-                <!-- <span class="label">名号：</span> -->
-                <!-- <span class="label">咒令：</span> -->
                 <div class="text-input">
                     <el-input v-model="name" placeholder="名号"></el-input>
                 </div>
@@ -29,9 +27,10 @@ export default {
     methods: {
         login() {
             this.socket.emit('login', { nickname: this.name, password: this.password }, (res) => {
-                console.log(res);
+                console.log("前端登录", res);
                 if (res && res.code === 0) {
-                    console.log(res);
+                    this.$store.commit('setIsManager', res.data.isManager);
+                    this.$store.commit('setUserName', res.data.nickname);
                     this.$router.replace({name: 'home'})
                 } else {
                     this.$message.error(res.message);

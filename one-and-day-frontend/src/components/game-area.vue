@@ -1,7 +1,9 @@
 <template>
     <div class="game-area">
         <div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>
-        <div class="game-area__view--chat" v-if="gameStatus === GAME_STATUS.CHAT">
+        <div class="game-area__time primary-color" v-if="number > 0">{{number}}</div>
+        <!-- 纯聊天状态 -->
+        <div class="game-area__view--chat" v-if="status === 'game_01'">
             <div v-for="(msg,index) in chatList" :key="index" 
                  :class="msg.isMy? 'game-area__view__item--my-self' : 'game-area__view__item'">
                 <div class="item__name">
@@ -12,7 +14,8 @@
                 <div class="item__arrows"></div>
             </div>
         </div>
-        <div class="game-area__view--game" v-if="gameStatus ===GAME_STATUS.GAME">
+        <!-- 游戏状态 -->
+        <div class="game-area__view--game" v-if="status !== 'game_01'">
             <img :src="questionUrl" alt="">
         </div>
         <div class="game-area__operation">
@@ -30,11 +33,12 @@
                     </el-button>
                 </div>
             </div>
+            {{inputStatus}} {{isManager}} {{['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status)}}
             <div class="game-area__operation__input">
                 <el-input type="textarea" v-model="text"/>
                 <div class="operation__input__button">
                     <el-button class="el-button__exit" @click="exit">退出</el-button>
-                    <el-button  @click="send" >发送</el-button>
+                    <el-button  @click="send" :disabled="inputStatus">发送</el-button>
                 </div>
             </div>
         </div>
@@ -45,6 +49,8 @@ import {mapState} from 'vuex'
 export default {
     data(){
         return {
+            // 倒计时数字
+            number: 0,
             // 输入文字
             text: '',
             operation: {},
@@ -52,16 +58,16 @@ export default {
             ADMIN_ACTION: [
                 {
                     text: '选择',
-                    key: 'A'
+                    key: 'game_01'
                 },{
                     text: '简答',
-                    key: 'B'
+                    key: 'game_02'
                 },{
                     text: '抠图',
-                    key: 'C'
+                    key: 'game_03'
                 },{
                     text: '加时',
-                    key: 'D'
+                    key: 'game_04'
                 }
             ],
             // 用户操作按钮
@@ -109,33 +115,130 @@ export default {
     computed: {
         ...mapState({
             status: state => state.status,
-            userType: state => state.userType,
-            gameStatus: state => state.gameStatus,
+            isManager: state => state.isManager,
+            userName: state => state.userName,
             tips: state => state.tips
             }),
         inputStatus(){
-            return !(this.userType === 'admin' || this.status === 'input')
+            return !(this.isManager || ['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status))
         },
         buttonStatus(){
-            return !(this.userType === 'admin' || this.status === 'select')
+            return !(this.isManager || ['game_01', 'game_04'].includes(this.status))
         }
     },
     created () {
-         this.operation = this.userType === 'admin'?  this.ADMIN_ACTION : this.MEMBER_ACTION
+         this.operation = this.isManager?  this.ADMIN_ACTION : this.MEMBER_ACTION
     },
     methods: {
-        // 退出
+        // 倒计时
+        countDown(time){
+            if(this.time === 0) return
+            this.number = time + 0
+            setTimeout(() => {
+                this.countDown(this.number - 1);
+            }, 1000)
+        },
+        // 点击退出
         exit(){
-            this.$router.replace({name: 'login'})
+            this.socket.emit('disconnect', {nickname: this.userName}, (res) => {
+                console.log(res)
+            });
+            this.$router.replace({name: 'login'});
         },
-        send(){
-            // 发送内容 测试提示信息
-            this.$store.commit('setTips', '1111111111111111111')
-            // this.tipsMessage = '1212121211212'
-        },
+        // 点击操作按钮
         operationSelect(val){
-            // 发送选择
-            console.log(val)
+            this.countDown(20);
+            if(this.isManager) {
+                this.startGame(val)
+            } else {
+                this.sendAnswer(val)
+            }
+            
+        },
+        // 开始游戏
+        startGame(gameKey){
+            this.socket.emit('startGame', { nickname: this.userName, gameKey: gameKey }, (res) => {
+                if (res && res.code === 0) {
+                    console.log("前端开启游戏", res);
+                } else {
+                    this.$message.error(res.message);
+                }
+            });
+        },
+        // 发送答案
+        sendAnswer(answer){
+            this.socket.emit('getUserAnswer', { nickname: this.userName, answer: answer }, (res) => {
+                if (res && res.code === 0) {
+                    console.log("发送答案", res);
+                } else {
+                    this.$message.error(res.message);
+                }
+            });
+        },
+        // 点击发送事件
+        send(){
+            const info = this.text;
+            // 游戏状态
+            if(this.status !== 'game_00') {
+                if(this.isManager) {
+                    // 管理员发送 提示信息
+                    console.log("管理员提示")
+                    this.sendTips(info);
+                } else {
+                    // 用户发送 答案
+                    console.log("用户答案")
+                    this.sendAnswer(info)
+                }
+            } else {
+                // 非游戏状态 纯聊天
+                console.log("纯聊天")
+                this.sendNews(info);
+            }
+
+        },
+        // 发送提示信息
+        sendTips(info){
+            this.socket.emit('sendTips', { nickname: this.userName, tips: info }, (res) => {
+                if (res && res.code === 0) {
+                    console.log("发送提示信息", res);
+                } else {
+                    this.$message.error(res.message);
+                }
+            });
+        },
+        // 发送聊天信息
+        sendNews(info){
+            this.socket.emit('sendUserNews', { nickname: this.userName, info: info }, (res) => {
+                if (res && res.code === 0) {
+                    console.log("发送聊天信息", res);
+                } else {
+                    this.$message.error(res.message);
+                }
+            });
+        },
+        // 获取聊天信息
+        getUserChatList(){
+            // todo 获取用户聊天信息列表
+            this.socket.on('sendUserNews', (data) => {
+                // 跟新用户聊天列表
+                this.chatList = data
+            })  
+        },
+        // 获取游戏状态
+        getGameStatus(){
+            // todo 获取当前的游戏状态 在每道题的答题时间在header给一个时间倒计时,是你那边每次都返回来一个数字然后我用setTimeout进行递减?
+            this.socket.on('sendUserNews', (data) => {
+                // 改变当前游戏状态
+                this.$store.commit('setStatus', data)
+            }) 
+        },
+        // 获取提示信息
+        getTips(){
+            // todo 获取提示信息
+            this.socket.on('sendUserNews', (data) => {
+                // 获取用户提示信息
+                this.$store.commit('setTips', data)
+            }) 
         },
         // 更换主题色
         changePrimary(name){
@@ -158,6 +261,14 @@ export default {
             line-height: 25px;
             border-radius: 4px;
             transform: translateX(-50%)
+        }
+        .game-area__time{
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 25px;
+            z-index: 999;
+            opacity: 0.3;
         }
         .game-area__view--chat{
             width: 100%;

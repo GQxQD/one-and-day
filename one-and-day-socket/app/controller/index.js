@@ -23,7 +23,7 @@ module.exports = {
         console.log('用户连接：', this.id);
         this.broadcast.emit('MESSAGE', this.id + ' 连接了');
     },
-
+    // 登录
     async login(data, cb = () => undefined) {
         console.log('用户登录：', data);
         try {
@@ -46,10 +46,45 @@ module.exports = {
         this.broadcast.emit('MESSAGE', this.id + ': ' + data);
         this.emit('MESSAGE', data);
     },
-
-    disconnect() {
-        console.log('用户退出：');
+    // 退出
+    disconnect(data, cb = () => undefined) {
+        console.log('用户退出：', data);
         this.broadcast.emit('MESSAGE', this.id + ' 退出了');
     },
+    // 发送消息
+    async sendUserNews(data, cb = () => undefined) {
+        try {
+            let res = await service.sendUserNews(data.nickname, data.info);
+            cb(success(res));
+        } catch (e) {
+            cb(failure(e.message));
+        }
+    },
+    // 管理员开始进行游戏 
+    async startGame(data, cb = () => undefined) {
+        try {
+            let res = await service.startGame(data.nickname, data.gameKey);
+            cb(success(res));
+        } catch (e) {
+            cb(failure(e.message));
+        }
+    },
+    // 获取用户答案答案
+    async getUserAnswer(data, cb = () => undefined) {
+        try {
+            let res = await service.getUserAnswer(data.nickname, data.answer);
+            cb(success(res));
+        } catch (e) {
+            cb(failure(e.message));
+        }
+    },
+    // 发送提示信息
+    async sendTips(data, cb = () => undefined) {
+        try {
+            let res = await service.sendTips(data.nickname, data.tips);
+            cb(success(res));
+        } catch (e) {
+            cb(failure(e.message));
+        }
+    },
 };
-

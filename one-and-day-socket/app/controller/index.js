@@ -1,3 +1,21 @@
+const redisUtil = require('../utils/redis-util');
+const service = require('../service');
+
+function success(data = null, code = 0, message = '') {
+    return {
+        data,
+        code,
+        message,
+    };
+}
+
+function failure(message = '', code = -1) {
+    return {
+        code,
+        message,
+    };
+}
+
 module.exports = {
 
     // 用户连接
@@ -6,13 +24,25 @@ module.exports = {
         this.broadcast.emit('MESSAGE', this.id + ' 连接了');
     },
 
-    login(data, cb) {
+    async login(data, cb = () => undefined) {
         console.log('用户登录：', data);
-        cb(data);
+        try {
+            let res = await service.login(data.nickname, data.password);
+            this.user = res;
+            cb(success(res));
+        } catch (e) {
+            cb(failure(e.message));
+        }
     },
 
-    MESSAGE(data) {
+    async MESSAGE(data) {
         console.log(data);
+        redisUtil.set('message', data);
+        // console.log(redisUtil.hdel('hash', '123', '222'));
+        console.log(await redisUtil.hset('hash', {
+            username: 'kohai',
+            password: '123456',
+        }));
         this.broadcast.emit('MESSAGE', this.id + ': ' + data);
         this.emit('MESSAGE', data);
     },

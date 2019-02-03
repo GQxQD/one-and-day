@@ -1,6 +1,6 @@
 <template>
     <div class="game-area">
-        <div class="game-area__tips primaryback-ground" v-if="tipsMessage"><i class="el-icon-bell"></i> {{tipsMessage}}</div>
+        <div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>
         <div class="game-area__view--chat" v-if="gameStatus === GAME_STATUS.CHAT">
             <div v-for="(msg,index) in chatList" :key="index" 
                  :class="msg.isMy? 'game-area__view__item--my-self' : 'game-area__view__item'">
@@ -45,8 +45,6 @@ import {mapState} from 'vuex'
 export default {
     data(){
         return {
-            // 提示信息 如果有提示内容则显示
-            tipsMessage: '来自xxx的提示： *******',
             // 输入文字
             text: '',
             operation: {},
@@ -99,10 +97,11 @@ export default {
         }
     },
     watch: {
-        tipsMessage(val){
+        tips(val){
             if(val){
                 setTimeout(()=>{
-                    this.tipsMessage = ''
+                    this.$store.commit('setTips', '')
+                    // this.tipsMessage = ''
                 }, 5000)
             }
         }
@@ -111,7 +110,8 @@ export default {
         ...mapState({
             status: state => state.status,
             userType: state => state.userType,
-            gameStatus: state => state.gameStatus
+            gameStatus: state => state.gameStatus,
+            tips: state => state.tips
             }),
         inputStatus(){
             return !(this.userType === 'admin' || this.status === 'input')
@@ -130,7 +130,8 @@ export default {
         },
         send(){
             // 发送内容 测试提示信息
-            this.tipsMessage = '1212121211212'
+            this.$store.commit('setTips', '1111111111111111111')
+            // this.tipsMessage = '1212121211212'
         },
         operationSelect(val){
             // 发送选择

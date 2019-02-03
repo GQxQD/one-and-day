@@ -10,8 +10,14 @@ export default new Vuex.Store({
         // 后台传回来的页面状态
         status: 'select',
         // 游戏状态
-        gameStatus: 'game'
+        gameStatus: 'game',
+        // 提示信息
+        tips: '来自xxx的提示： *******'
     },
-    mutations: {},
+    mutations: {
+        setTips(state, tips) {
+            state.tips = tips
+        }
+    },
     actions: {},
 });

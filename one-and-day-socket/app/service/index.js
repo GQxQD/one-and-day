@@ -28,7 +28,14 @@ module.exports = {
         return await dao.leave(id);
     },
     async getMemberList() {
-        return await dao.getMemberList();
+        let list = await dao.getMemberList();
+        let arr = [];
+        for (let key in list) {
+            if (list.hasOwnProperty(key)) {
+                arr.push(list[key]);
+            }
+        }
+        return [...new Set(arr)];
     },
     async checkAuth(token) {
         return await dao.checkAuth(token);
@@ -36,6 +43,15 @@ module.exports = {
     async getUserByNickname(nickname) {
         return await dao.getUserByNickname(nickname);
     },
+
+    async getStatus() {
+        return await dao.getStatus();
+    },
+
+    async setStatus(status) {
+        return await dao.setStatus(status);
+    },
+
     // 发送消息
     sendUserNews(name, info) {
         // TODO 获取用户发过来的消息 将用户名和消息还有当前时间合成一个对象添加到用户信息列表中返回给前端监听并进行列表更新

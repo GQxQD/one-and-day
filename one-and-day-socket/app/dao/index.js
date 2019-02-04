@@ -15,4 +15,10 @@ module.exports = {
     checkAuth(id) {
         return redis.hget('token', id);
     },
+    getStatus() {
+        return redis.get('status');
+    },
+    setStatus(status) {
+        return redis.set('status', status);
+    },
 };

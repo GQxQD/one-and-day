@@ -29,7 +29,9 @@ export default {
             this.socket.emit('login', { nickname: this.name, password: this.password }, (res) => {
                 console.log("前端登录", res);
                 if (res && res.code === 0) {
+                    // 设置是否是管理员变量
                     this.$store.commit('setIsManager', res.data.isManager);
+                    // 设置当前用户名
                     this.$store.commit('setUserName', res.data.nickname);
                     this.$store.commit('setToken', res.data.token);
                     this.$router.replace({name: 'home'})

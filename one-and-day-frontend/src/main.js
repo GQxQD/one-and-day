@@ -10,15 +10,29 @@ import store from './store';
 const socket = socket_io('http://localhost:3000');
 
 Vue.prototype.socket = socket;
-
+// 监听用户列表
 socket.on('members', (members) => {
     store.commit('setMemberList', members);
 });
-
+// 监听聊天框
 socket.on('message', (message) => {
-   store.commit('pushMessage', message);
+    store.commit('pushMessage', message);
 });
 
+// 监听游戏状态
+socket.on('status', (status) => {
+    store.commit('setStatus', status);
+});
+
+// 监听提示
+socket.on('tip', (tip) => {
+    store.commit('setTips', tip);
+});
+
+// 监听提示
+socket.on('question', (question) => {
+    store.commit('setQuestion', question);
+});
 
 Vue.use(ElementUI);
 

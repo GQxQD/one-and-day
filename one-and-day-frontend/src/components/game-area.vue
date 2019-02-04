@@ -34,7 +34,7 @@
                     <el-button class="primary-color-red" @click="changePrimary('red')">新年红</el-button>
                     <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button>
                 </div>
-                <div class="game-area__operation__select">
+                <div class="game-area__operation__select" v-show="hasSelect">
                     <el-button v-for="(action,index) in this.operation" :key="index"
                                @click="operationSelect(action.key)"
                                :disabled="buttonStatus">
@@ -60,6 +60,8 @@ export default {
         return {
             // 倒计时数字
             number: 0,
+            // 已选择答案
+            hasSelect: true,
             // 输入文字
             text: '',
             operation: {},
@@ -108,7 +110,8 @@ export default {
         },
         question: {
             handler: () => {
-                this.number = 15;
+                this.hasSelect = true;
+                this.countDown(10);
             },
             deep: true
         }
@@ -150,7 +153,6 @@ export default {
         },
         // 点击操作按钮
         operationSelect(val) {
-            this.countDown(20);
             if (this.isManager) {
                 this.startGame(val);
             } else {
@@ -164,6 +166,7 @@ export default {
         },
         // 发送答案
         sendAnswer(answer) {
+            this.hasSelect = false;
             this.socket.emit('answer', answer);
         },
         // 点击发送事件

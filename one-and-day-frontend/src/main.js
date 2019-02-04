@@ -7,7 +7,18 @@ import './styles/index.js';
 import router from './router';
 import store from './store';
 
-Vue.prototype.socket = socket_io('http://localhost:3000');
+const socket = socket_io('http://localhost:3000');
+
+Vue.prototype.socket = socket;
+
+socket.on('members', (members) => {
+    store.commit('setMemberList', members);
+});
+
+socket.on('message', (message) => {
+   store.commit('pushMessage', message);
+});
+
 
 Vue.use(ElementUI);
 

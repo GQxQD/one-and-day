@@ -29,9 +29,30 @@ module.exports = {
         try {
             let res = await service.login(data.nickname, data.password);
             this.user = res;
+            await service.join(res.nickname, res.token);
+            let members = await service.getMemberList();
+            this.emit('members', members);
+            this.broadcast.emit('members', members);
             cb(success(res));
         } catch (e) {
             cb(failure(e.message));
+        }
+    },
+
+    async checkAuth(cb = () => undefined) {
+        // console.log('check', this.user);
+        // if (this.user) {
+        //     cb(success());
+        //     return;
+        // }
+        // let info = await service.checkAuth();
+        // console.log('info', info);
+        if (this.user) {
+            // this.user = await service.getUserByNickname(info);
+            // console.log(this.user);
+            cb(success());
+        } else {
+            cb(failure('用户还没登录'));
         }
     },
 
@@ -47,9 +68,27 @@ module.exports = {
         this.emit('MESSAGE', data);
     },
     // 退出
-    disconnect(data, cb = () => undefined) {
-        console.log('用户退出：', data);
-        this.broadcast.emit('MESSAGE', this.id + ' 退出了');
+    async disconnect(data, cb = () => undefined) {
+        console.log('用户退出：', this.user);
+        if (this.user) {
+            await service.leave(this.user.token);
+            let members = await service.getMemberList();
+            this.emit('members', members);
+            this.broadcast.emit('members', members);
+        }
+
+        // this.broadcast.emit('MESSAGE', this.id + ' 退出了');
+    },
+    message(message) {
+        let msg = {
+            nickname: this.user.nickname,
+            time: (new Date()),
+            message,
+        };
+        console.log('信息：', msg);
+        this.broadcast.emit('message', msg);
+        msg.isMy = true;
+        this.emit('message', msg);
     },
     // 发送消息
     async sendUserNews(data, cb = () => undefined) {

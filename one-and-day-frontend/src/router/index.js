@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { Message } from 'element-ui';
+import store from '../store';
 
 Vue.use(Router);
 
-export default new Router({
-    mode: 'history',
+const router = new Router({
+    // mode: 'history',
     base: process.env.BASE_URL,
     routes: [
         {
@@ -34,3 +36,25 @@ export default new Router({
 
     ],
 });
+
+router.beforeEach((to, form, next) => {
+    if (to.name === 'login') {
+        next();
+    } else {
+        // console.log(store.getters.token);
+        // if (store.getters.token) {
+        Vue.prototype.socket.emit('checkAuth', (res) => {
+            if (res && res.code === 0) {
+                next();
+            } else {
+                Message.error(res.message);
+                next('/');
+            }
+        });
+        // } else {
+        //     next('/');
+        // }
+    }
+});
+
+export default router;

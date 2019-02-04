@@ -31,6 +31,7 @@ export default {
                 if (res && res.code === 0) {
                     this.$store.commit('setIsManager', res.data.isManager);
                     this.$store.commit('setUserName', res.data.nickname);
+                    this.$store.commit('setToken', res.data.token);
                     this.$router.replace({name: 'home'})
                 } else {
                     this.$message.error(res.message);

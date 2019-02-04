@@ -1,13 +1,15 @@
+const uuid = require('uuid');
 const dao = require('../dao');
 
 module.exports = {
     async login(nickname, password) {
         if (nickname && password) {
-            let user = await dao.login(nickname);
+            let user = await dao.getUserByNickname(nickname);
             if (user) {
                 user = JSON.parse(user);
                 if (user.password === password) {
                     user.password = '';
+                    user.token = uuid();
                     return user;
                 } else {
                     throw new Error('密码不正确');
@@ -19,13 +21,28 @@ module.exports = {
             throw new Error('昵称或密码不能为空');
         }
     },
+    async join(nickname, id) {
+        return await dao.join(nickname, id);
+    },
+    async leave(id) {
+        return await dao.leave(id);
+    },
+    async getMemberList() {
+        return await dao.getMemberList();
+    },
+    async checkAuth(token) {
+        return await dao.checkAuth(token);
+    },
+    async getUserByNickname(nickname) {
+        return await dao.getUserByNickname(nickname);
+    },
     // 发送消息
     sendUserNews(name, info) {
         // TODO 获取用户发过来的消息 将用户名和消息还有当前时间合成一个对象添加到用户信息列表中返回给前端监听并进行列表更新
         return {
             name: name,
-            info: info
-        }
+            info: info,
+        };
     },
     // 开始游戏
     async startGame(name, gameKey) {
@@ -34,8 +51,8 @@ module.exports = {
         // 返回值 
         return {
             name: name,
-            gameKey: gameKey
-        }
+            gameKey: gameKey,
+        };
     },
     // 发送答案
     // TODO 获取用户发送过来的答案 将答案和正确答案进行匹配
@@ -44,15 +61,15 @@ module.exports = {
     async getUserAnswer(name, answer) {
         return {
             name: name,
-            answer: answer
-        }
+            answer: answer,
+        };
     },
     // 发送提示信息
     // TODO 管理员发送的提示信息对全体成员进行广播
     async sendTips(name, tips) {
         return {
             name: name,
-            tips: tips
-        }
+            tips: tips,
+        };
     },
 };

@@ -13,21 +13,37 @@ export default new Vuex.Store({
         status: 'game_01',
         // 提示信息
         tips: '来自xxx的提示： *******',
+        memberList: [],
+        messageList: [],
 
     },
+    getters: {
+        token() {
+            return window.localStorage.getItem('token');
+        },
+    },
     mutations: {
+        setToken(state, token) {
+            window.localStorage.setItem('token', token);
+        },
         setTips(state, tips) {
-            state.tips = tips
+            state.tips = tips;
         },
         setIsManager(state, isManager) {
-            state.isManager = isManager
+            state.isManager = isManager;
         },
         setUserName(state, userName) {
-            state.userName = userName
+            state.userName = userName;
         },
         setStatus(state, status) {
-            state.status = status
-        }
+            state.status = status;
+        },
+        setMemberList(state, list) {
+            state.memberList = list;
+        },
+        pushMessage(state, message) {
+            state.messageList.push(message);
+        },
     },
     actions: {},
 });

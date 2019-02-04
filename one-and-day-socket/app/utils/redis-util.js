@@ -36,8 +36,8 @@ class RedisUtil {
         return this.redis.hget(where, key);
     }
 
-    hgetall() {
-        return this.redis.hgetall(arguments);
+    hgetall(where) {
+        return this.redis.hgetall(where);
     }
 
 }

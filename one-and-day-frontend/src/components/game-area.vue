@@ -33,7 +33,6 @@
                     </el-button>
                 </div>
             </div>
-            {{inputStatus}} {{isManager}} {{['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status)}}
             <div class="game-area__operation__input">
                 <el-input type="textarea" v-model="text"/>
                 <div class="operation__input__button">

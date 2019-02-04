@@ -108,9 +108,15 @@ function init() {
 //     console.log(d);
 // });
 
-redisUtil.lpush('test', '2');
-redisUtil.lpush('test', '11211');
-redisUtil.lpush('test', '11211');
-redisUtil.lpush('test', '2222');
+// redisUtil.lpush('test', '2');
+// redisUtil.lpush('test', '11211');
+// redisUtil.lpush('test', '11211');
+// redisUtil.lpush('test', '2222');
 
-redisUtil.lrange('test', 0, 2).then(console.log);
+// redisUtil.lrange('test', 0, 2).then(console.log);
+
+const qs = require('./question');
+qs.forEach(q => {
+
+    redisUtil.lpush('select', q);
+});

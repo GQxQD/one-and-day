@@ -19,10 +19,13 @@
             <!-- 选择题 -->
             <div class="select_question" v-if="question.type === 'game_01'">
                 <div class="title">{{question.title}}</div>
-                <div class="option">A.{{question.options.A}}</div>
-                <div class="option">B.{{question.options.B}}</div>
-                <div class="option">C.{{question.options.C}}</div>
-                <div class="option">D.{{question.options.D}}</div>
+                <div class="option"
+                     v-for="(item, index) in question.options" :key="index">{{item}}
+                </div>
+                <!--<div class="option">A.{{question.options.A}}</div>-->
+                <!--<div class="option">B.{{question.options.B}}</div>-->
+                <!--<div class="option">C.{{question.options.C}}</div>-->
+                <!--<div class="option">D.{{question.options.D}}</div>-->
             </div>
             <!-- 简答题 抠图题 -->
             <div class="picture_question" v-else><img :src="question.img" alt=""></div>
@@ -96,11 +99,11 @@ export default {
                     text: 'D',
                     key: 'D',
                 },
-            ]
+            ],
         };
     },
     watch: {
-        tips (val) {
+        tips(val) {
             if (val) {
                 setTimeout(() => {
                     this.$store.commit('setTips', '');
@@ -113,8 +116,8 @@ export default {
                 this.hasSelect = true;
                 this.countDown(10);
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
     computed: {
         ...mapState({
@@ -122,7 +125,7 @@ export default {
             isManager: state => state.isManager,
             userName: state => state.userName,
             tips: state => state.tips,
-            question: state => state.question
+            question: state => state.question,
         }),
         inputStatus() {
             return !(this.isManager || ['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status));
@@ -132,7 +135,7 @@ export default {
         },
         messageList() {
             return this.$store.state.messageList;
-        }
+        },
     },
     created() {
         this.operation = this.isManager ? this.ADMIN_ACTION : this.MEMBER_ACTION;
@@ -171,7 +174,7 @@ export default {
         },
         // 点击发送事件
         send() {
-            if(!this.text || this.text.trim() === '') return
+            if (!this.text || this.text.trim() === '') return;
             const info = this.text;
             // 游戏状态
             if (this.status !== 'game_00') {
@@ -313,26 +316,26 @@ export default {
         background: #eeeeee;
         overflow: auto;
         text-align: left;
-        .select_question{
+        .select_question {
             padding: 30px 20px 0 20px;
-            .title{
+            .title {
                 font-size: 18px;
                 color: #000;
-                font-weight:550;
+                font-weight: 550;
             }
-            .option{
+            .option {
                 margin: 5px 0;
                 font-size: 16px;
             }
         }
-        .picture_question{
+        .picture_question {
             height: 100%;
             width: 100%;
             img {
-            width: 100%;
+                width: 100%;
+            }
         }
-        }
-        
+
     }
     .game-area__operation {
         height: 200px;

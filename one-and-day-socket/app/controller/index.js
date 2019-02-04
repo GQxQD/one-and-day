@@ -42,10 +42,40 @@ module.exports = {
     },
 
     async status(status = 'game_00') {
+        console.log('游戏状态：', status);
         if (this.user && this.user.isManager) {
+            console.log('管理', this.user);
             await service.setStatus(status);
             this.emit('status', status);
             this.broadcast.emit('status', status);
+            if (status === 'game_01') {
+                console.log('xxxx');
+                this.emit('message', {
+                    message: '5s后开始选择题',
+                    nickname: '系统',
+                    time: new Date(),
+                });
+                this.emit('tip', '5s后开始选择题');
+                setTimeout(() => {
+                    this.emit('message', {
+                        message: '开始选择题',
+                        nickname: '系统',
+                        time: new Date(),
+                    });
+                    this.emit('tip', '开始选择题');
+                    this.emit('question', {
+                        'title': '（该题目不计分）请问大家想看会长女装吗？',
+                        'type': 'game_01',
+                        'img': '',
+                        'options': [
+                            'A:想',
+                            'B:超级想',
+                            'C:说不想实际很想',
+                            'D:没有一天不在想',
+                        ],
+                    });
+                }, 5000);
+            }
         } else {
             this.emit('logout');
         }

@@ -16,11 +16,13 @@ socket.on('members', (members) => {
 });
 // 监听聊天框
 socket.on('message', (message) => {
+    console.log('message', message);
     store.commit('pushMessage', message);
 });
 
 // 监听游戏状态
 socket.on('status', (status) => {
+    console.log('游戏状态', status);
     store.commit('setStatus', status);
 });
 
@@ -32,6 +34,12 @@ socket.on('tip', (tip) => {
 // 监听提示
 socket.on('question', (question) => {
     store.commit('setQuestion', question);
+});
+
+socket.on('logout', () => {
+    router.replace({
+        name: 'login',
+    });
 });
 
 Vue.use(ElementUI);

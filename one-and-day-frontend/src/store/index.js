@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { Notification } from 'element-ui';
 
 Vue.use(Vuex);
 
@@ -29,6 +30,10 @@ export default new Vuex.Store({
             window.localStorage.setItem('token', token);
         },
         setTips(state, tips) {
+            Notification({
+                title: '系统通知',
+                message: tips,
+            });
             state.tips = tips;
         },
         setIsManager(state, isManager) {
@@ -47,9 +52,9 @@ export default new Vuex.Store({
             state.messageList.push(message);
         },
         setQuestion(state, question) {
-            state.question = question
-        }
+            state.question = question;
+        },
     },
     actions: {},
 });
-1
+1;

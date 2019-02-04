@@ -33,9 +33,21 @@ module.exports = {
             let members = await service.getMemberList();
             this.emit('members', members);
             this.broadcast.emit('members', members);
+            let status = await service.getStatus() || 'game_00';
+            this.emit('status', status);
             cb(success(res));
         } catch (e) {
             cb(failure(e.message));
+        }
+    },
+
+    async status(status = 'game_00') {
+        if (this.user && this.user.isManager) {
+            await service.setStatus(status);
+            this.emit('status', status);
+            this.broadcast.emit('status', status);
+        } else {
+            this.emit('logout');
         }
     },
 
@@ -80,15 +92,17 @@ module.exports = {
         // this.broadcast.emit('MESSAGE', this.id + ' 退出了');
     },
     message(message) {
-        let msg = {
-            nickname: this.user.nickname,
-            time: (new Date()),
-            message,
-        };
-        console.log('信息：', msg);
-        this.broadcast.emit('message', msg);
-        msg.isMy = true;
-        this.emit('message', msg);
+        if (this.user) {
+            let msg = {
+                nickname: this.user.nickname,
+                time: (new Date()),
+                message,
+            };
+            console.log('信息：', msg);
+            this.broadcast.emit('message', msg);
+            msg.isMy = true;
+            this.emit('message', msg);
+        }
     },
     // 发送消息
     async sendUserNews(data, cb = () => undefined) {

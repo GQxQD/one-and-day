@@ -7,7 +7,7 @@ import './styles/index.js';
 import router from './router';
 import store from './store';
 
-const socket = socket_io('http://localhost:3000');
+const socket = socket_io('http://kohai.e2.luyouxia.net:32376');//socket_io('http://localhost:3000');
 
 Vue.prototype.socket = socket;
 // 监听用户列表

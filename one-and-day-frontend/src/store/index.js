@@ -10,9 +10,11 @@ export default new Vuex.Store({
         // 用户类型
         isManager: false,
         // 后台穿回来的游戏状态 game_00 没有游戏 game_01 选择题 game_02 简单 game_03 抠图 game_04 加时
-        status: 'game_01',
+        status: 'game_00',
+        // 问题内容
+        question: {},
         // 提示信息
-        tips: '来自xxx的提示： *******',
+        tips: '',
         memberList: [],
         messageList: [],
 
@@ -44,6 +46,10 @@ export default new Vuex.Store({
         pushMessage(state, message) {
             state.messageList.push(message);
         },
+        setQuestion(state, question) {
+            state.question = question
+        }
     },
     actions: {},
 });
+1

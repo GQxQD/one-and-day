@@ -62,22 +62,25 @@ export default {
             number: 0,
             // 输入文字
             text: '',
-            operation: {},
+            operation: [],
             // 管理员操作按钮
             ADMIN_ACTION: [
                 {
                     text: '选择',
                     key: 'game_01',
-                }, {
-                    text: '简答',
-                    key: 'game_02',
-                }, {
-                    text: '抠图',
-                    key: 'game_03',
-                }, {
-                    text: '加时',
-                    key: 'game_04',
                 },
+                // {
+                //     text: '简答',
+                //     key: 'game_02',
+                // },
+                // {
+                //     text: '抠图',
+                //     key: 'game_03',
+                // },
+                // {
+                //     text: '加时',
+                //     key: 'game_04',
+                // },
             ],
             // 用户操作按钮
             MEMBER_ACTION: [
@@ -94,7 +97,7 @@ export default {
                     text: 'D',
                     key: 'D',
                 },
-            ]
+            ],
         };
     },
     watch: {
@@ -112,7 +115,7 @@ export default {
             status: state => state.status,
             isManager: state => state.isManager,
             userName: state => state.userName,
-            tips: state => state.tips
+            tips: state => state.tips,
         }),
         inputStatus() {
             return !(this.isManager || ['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status));
@@ -123,9 +126,9 @@ export default {
         messageList() {
             return this.$store.state.messageList;
         },
-        question(){
+        question() {
             return this.$store.state.question;
-        }
+        },
     },
     created() {
         this.operation = this.isManager ? this.ADMIN_ACTION : this.MEMBER_ACTION;
@@ -164,7 +167,7 @@ export default {
         },
         // 点击发送事件
         send() {
-            if(!this.text || this.text.trim() === '') return
+            if (!this.text || this.text.trim() === '') return;
             const info = this.text;
             // 游戏状态
             if (this.status !== 'game_00') {
@@ -306,26 +309,26 @@ export default {
         background: #eeeeee;
         overflow: auto;
         text-align: left;
-        .select_question{
+        .select_question {
             padding: 30px 20px 0 20px;
-            .title{
+            .title {
                 font-size: 18px;
                 color: #000;
-                font-weight:550;
+                font-weight: 550;
             }
-            .option{
+            .option {
                 margin: 5px 0;
                 font-size: 16px;
             }
         }
-        .picture_question{
+        .picture_question {
             height: 100%;
             width: 100%;
             img {
-            width: 100%;
+                width: 100%;
+            }
         }
-        }
-        
+
     }
     .game-area__operation {
         height: 200px;

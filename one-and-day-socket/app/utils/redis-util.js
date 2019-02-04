@@ -40,6 +40,13 @@ class RedisUtil {
         return this.redis.hgetall(where);
     }
 
+    lpush(where, data) {
+        return this.redis.lpush(where, JSON.stringify(data));
+    }
+    lrange(where, start, stop) {
+        return this.redis.lrange(where, start, stop);
+    }
+
 }
 
 module.exports = new RedisUtil();

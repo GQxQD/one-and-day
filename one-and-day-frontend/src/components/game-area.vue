@@ -98,7 +98,7 @@ export default {
         };
     },
     watch: {
-        tips(val) {
+        tips (val) {
             if (val) {
                 setTimeout(() => {
                     this.$store.commit('setTips', '');
@@ -106,13 +106,20 @@ export default {
                 }, 5000);
             }
         },
+        question: {
+            handler: () => {
+                this.number = 15;
+            },
+            deep: true
+        }
     },
     computed: {
         ...mapState({
             status: state => state.status,
             isManager: state => state.isManager,
             userName: state => state.userName,
-            tips: state => state.tips
+            tips: state => state.tips,
+            question: state => state.question
         }),
         inputStatus() {
             return !(this.isManager || ['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status));
@@ -122,9 +129,6 @@ export default {
         },
         messageList() {
             return this.$store.state.messageList;
-        },
-        question(){
-            return this.$store.state.question;
         }
     },
     created() {

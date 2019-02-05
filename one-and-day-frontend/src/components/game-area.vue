@@ -30,7 +30,7 @@
                 <div class="game-area__operation__primary">
                     <el-button class="primary-color-pink" @click="changePrimary('pink')">B站粉</el-button>
                     <el-button class="primary-color-red" @click="changePrimary('red')">新年红</el-button>
-                    <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button>
+                    <!-- <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button> -->
                 </div>
                 <div class="game-area__operation__select">
                     <el-button v-for="(action,index) in this.operation" :key="index"

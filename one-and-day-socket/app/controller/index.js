@@ -59,47 +59,47 @@ module.exports = {
             this.emit('status', status);
             this.broadcast.emit('status', status);
             if (status === 'game_01') {
-                this.emit('tip', '5s后开始选择题');
-                this.broadcast.emit('tip', '5s后开始选择题');
+                this.emit('tip', '10s后开始选择题');
+                this.broadcast.emit('tip', '10s后开始选择题');
                 clearInterval(timer1);
                 clearTimeout(timer2);
-                setTimeout(() => {
-                    this.emit('tip', '开始选择题');
-                    this.broadcast.emit('tip', '开始选择题');
-                    currentIndex = -1;
-                    timer1 = setInterval(() => {
-                        currentIndex++;
-                        // 当 结束的时候
-                        if (currentIndex >= questionLength) {
-                            clearInterval(timer1);
-                            this.emit('tip', '结束答题');
-                            this.broadcast.emit('tip', '结束答题');
-                            service.setStatus('game_00');
-                            this.emit('status', 'game_00');
-                            this.broadcast.emit('status', 'game_00');
-                            return;
-                        }
-                        let question = { ...questions[currentIndex], answer: '' };
-                        this.emit('question', question);
-                        this.broadcast.emit('question', question);
-                    }, questionDelay);
-                    // 防止错乱
-                    setTimeout(() => {
+                currentIndex = -1;
+                timer1 = setInterval(() => {
+                    currentIndex++;
+                    // 当 结束的时候
+                    if (currentIndex >= questionLength) {
                         clearInterval(timer1);
-                        clearTimeout(timer2);
-                    }, questionLength * questionDelay + 10000);
-                    // this.emit('question', {
-                    //     'title': '（该题目不计分）请问大家想看会长女装吗？',
-                    //     'type': 'game_01',
-                    //     'img': '',
-                    //     'options': [
-                    //         'A:想',
-                    //         'B:超级想',
-                    //         'C:说不想实际很想',
-                    //         'D:没有一天不在想',
-                    //     ],
-                    // });
-                }, 5000);
+                        this.emit('tip', '结束答题');
+                        this.broadcast.emit('tip', '结束答题');
+                        service.setStatus('game_00');
+                        this.emit('status', 'game_00');
+                        this.broadcast.emit('status', 'game_00');
+                        return;
+                    }
+                    let question = {
+                        ...questions[currentIndex],
+                        title: `（${currentIndex + 1} / ${questionLength}）` + questions[currentIndex].title,
+                        answer: '',
+                    };
+                    this.emit('question', question);
+                    this.broadcast.emit('question', question);
+                }, questionDelay);
+                // 防止错乱
+                setTimeout(() => {
+                    clearInterval(timer1);
+                    clearTimeout(timer2);
+                }, questionLength * questionDelay + 10000);
+                // this.emit('question', {
+                //     'title': '（该题目不计分）请问大家想看会长女装吗？',
+                //     'type': 'game_01',
+                //     'img': '',
+                //     'options': [
+                //         'A:想',
+                //         'B:超级想',
+                //         'C:说不想实际很想',
+                //         'D:没有一天不在想',
+                //     ],
+                // });
             }
         } else {
             this.emit('logout');
@@ -138,7 +138,14 @@ module.exports = {
     },
 
     tip(message) {
-        if (this.user) {
+        if (this.user && this.user.isManager) {
+            if (message === 'SHUTDOWN') {
+                service.setStatus('game_00');
+                this.emit('status', 'game_00');
+                this.broadcast.emit('status', 'game_00');
+                clearInterval(timer1);
+                clearTimeout(timer2);
+            }
             this.emit('tip', this.user.nickname + ': ' + message);
             this.broadcast.emit('tip', this.user.nickname + ': ' + message);
         }
@@ -186,6 +193,15 @@ module.exports = {
     },
     message(message) {
         if (this.user) {
+            if (this.user.isManager) {
+                if (message === 'SHUTDOWN') {
+                    service.setStatus('game_00');
+                    this.emit('status', 'game_00');
+                    this.broadcast.emit('status', 'game_00');
+                    clearInterval(timer1);
+                    clearTimeout(timer2);
+                }
+            }
             let msg = {
                 nickname: this.user.nickname,
                 time: (new Date()),

@@ -37,7 +37,7 @@
                     <el-button class="primary-color-red" @click="changePrimary('red')">新年红</el-button>
                     <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button>
                 </div>
-                <div class="game-area__operation__select" v-show="false && hasSelect">
+                <div class="game-area__operation__select" v-show="hasSelect">
                     <el-button v-for="(action,index) in this.operation" :key="index"
                                @click="operationSelect(action.key)"
                                :disabled="buttonStatus">
@@ -73,16 +73,17 @@ export default {
                 {
                     text: '选择',
                     key: 'game_01',
-                }, {
-                    text: '简答',
-                    key: 'game_02',
-                }, {
-                    text: '抠图',
-                    key: 'game_03',
-                }, {
-                    text: '加时',
-                    key: 'game_04',
                 },
+                // {
+                //     text: '简答',
+                //     key: 'game_02',
+                // }, {
+                //     text: '抠图',
+                //     key: 'game_03',
+                // }, {
+                //     text: '加时',
+                //     key: 'game_04',
+                // },
             ],
             // 用户操作按钮
             MEMBER_ACTION: [

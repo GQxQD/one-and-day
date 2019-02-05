@@ -1,5 +1,6 @@
 const redisUtil = require('../utils/redis-util');
 const service = require('../service');
+const questions = require('../question');
 
 function success(data = null, code = 0, message = '') {
     return {
@@ -15,6 +16,12 @@ function failure(message = '', code = -1) {
         message,
     };
 }
+
+let timer1 = null;
+let timer2 = null;
+let currentIndex = 0;
+const questionDelay = 5000;
+const questionLength = 5; // questions.length;
 
 module.exports = {
 
@@ -49,31 +56,37 @@ module.exports = {
             this.emit('status', status);
             this.broadcast.emit('status', status);
             if (status === 'game_01') {
-                console.log('xxxx');
-                this.emit('message', {
-                    message: '5s后开始选择题',
-                    nickname: '系统',
-                    time: new Date(),
-                });
                 this.emit('tip', '5s后开始选择题');
                 setTimeout(() => {
-                    this.emit('message', {
-                        message: '开始选择题',
-                        nickname: '系统',
-                        time: new Date(),
-                    });
                     this.emit('tip', '开始选择题');
-                    this.emit('question', {
-                        'title': '（该题目不计分）请问大家想看会长女装吗？',
-                        'type': 'game_01',
-                        'img': '',
-                        'options': [
-                            'A:想',
-                            'B:超级想',
-                            'C:说不想实际很想',
-                            'D:没有一天不在想',
-                        ],
-                    });
+                    currentIndex = 0;
+                    timer1 = setInterval(() => {
+                        this.emit('question', questions[currentIndex]);
+                        currentIndex++;
+                        if (currentIndex >= questionLength) {
+                            clearInterval(timer1);
+                            timer2 = setTimeout(() => {
+                                this.emit('tip', '结束答题');
+                                clearTimeout(timer2);
+                            }, questionDelay);
+                        }
+                    }, questionDelay);
+                    // 防止错乱
+                    setTimeout(() => {
+                        clearInterval(timer1);
+                        clearTimeout(timer2);
+                    }, questionLength * questionDelay + 10000);
+                    // this.emit('question', {
+                    //     'title': '（该题目不计分）请问大家想看会长女装吗？',
+                    //     'type': 'game_01',
+                    //     'img': '',
+                    //     'options': [
+                    //         'A:想',
+                    //         'B:超级想',
+                    //         'C:说不想实际很想',
+                    //         'D:没有一天不在想',
+                    //     ],
+                    // });
                 }, 5000);
             }
         } else {

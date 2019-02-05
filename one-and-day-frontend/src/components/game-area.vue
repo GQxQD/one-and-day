@@ -97,12 +97,19 @@ export default {
                     key: 'D',
                 },
             ],
+            timer: ''
+
         };
     },
     watch: {
         time(val) {
             if(val) {
-                this.countDown(10);
+                this.number = 10;
+                clearInterval(this.timer)
+                this.timer = setInterval(() => { 
+                    this.number = this.number - 1;
+                   if(this.number === 0 )  clearInterval(this.timer)
+                }, 1000)
                 this.store.commit('setTime', false);
             }
         },
@@ -155,13 +162,10 @@ export default {
     },
     methods: {
         // 倒计时
-        countDown(time) {
-            if (time === 0) return;
-            this.number = time + 0;
-            setTimeout(() => {
-                this.countDown(time - 1);
-            }, 1000);
+        countDown() {
+            if()
         },
+        decreaseNumber
         // 点击退出
         exit() {
             window.localStorage.clear();

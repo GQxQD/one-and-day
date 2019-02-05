@@ -14,6 +14,8 @@ export default new Vuex.Store({
         status: 'game_00',
         // 问题内容
         question: {},
+        // 倒计时
+        time: false,
         // 提示信息
         tips: '',
         memberList: [],
@@ -54,6 +56,9 @@ export default new Vuex.Store({
         setQuestion(state, question) {
             state.question = question;
         },
+        setTime(state, time) {
+            state.time = time;
+        }
     },
     actions: {},
 });

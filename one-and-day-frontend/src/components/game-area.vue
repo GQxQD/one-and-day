@@ -100,18 +100,15 @@ export default {
         };
     },
     watch: {
-        // tips(val) {
-        //     if (val) {
-        //         setTimeout(() => {
-        //             this.$store.commit('setTips', '');
-        //             // this.tipsMessage = ''
-        //         }, 5000);
-        //     }
-        // },
+        time(val) {
+            if(val) {
+                this.countDown(10);
+                this.store.commit('setTime', false);
+            }
+        },
         question: {
             handler() {
                 this.hasSelect = false;
-                this.countDown(10);
             },
             deep: true,
         },
@@ -132,7 +129,7 @@ export default {
             status: state => state.status,
             isManager: state => state.isManager,
             userName: state => state.userName,
-            // tips: state => state.tips,
+            time: state => state.time,
             question: state => state.question,
         }),
         inputStatus() {
@@ -140,7 +137,9 @@ export default {
         },
         buttonStatus() {
             //  管理员 永远打开
-            if (this.isManager) return false;
+            if (this.isManager && this.status === 'game_00') return false;
+            // 
+            if(this.isManager && this.status !== 'game_00') return true
             // 选择题状态下 切还没有进行选择
             if (['game_01', 'game_04'].includes(this.status) && !this.hasSelect) return false;
             // 其余状态
@@ -157,10 +156,10 @@ export default {
     methods: {
         // 倒计时
         countDown(time) {
-            if (this.time === 0) return;
+            if (time === 0) return;
             this.number = time + 0;
             setTimeout(() => {
-                this.countDown(this.number - 1);
+                this.countDown(time - 1);
             }, 1000);
         },
         // 点击退出

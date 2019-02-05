@@ -23,7 +23,6 @@ socket.on('message', (message) => {
 
 // 监听游戏状态
 socket.on('status', (status) => {
-    console.log('游戏状态', status);
     store.commit('setStatus', status);
     store.commit('setQuestion', {});
 });
@@ -36,7 +35,7 @@ socket.on('tip', (tip) => {
 // 监听提示
 socket.on('question', (question) => {
     store.commit('setQuestion', question);
-    store.commit('setTime', true);
+    store.commit('setTime');
 });
 
 socket.on('logout', () => {

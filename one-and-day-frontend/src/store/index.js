@@ -15,7 +15,7 @@ export default new Vuex.Store({
         // 问题内容
         question: {},
         // 倒计时
-        time: false,
+        time: 2,
         // 提示信息
         tips: '',
         memberList: [],
@@ -56,8 +56,8 @@ export default new Vuex.Store({
         setQuestion(state, question) {
             state.question = question;
         },
-        setTime(state, time) {
-            state.time = time;
+        setTime(state) {
+            state.time = state.time + 1;
         }
     },
     actions: {},

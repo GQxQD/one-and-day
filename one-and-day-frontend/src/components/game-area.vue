@@ -1,6 +1,5 @@
 <template>
     <div class="game-area">
-        <!--<div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>-->
         <div class="game-area__time primary-color" v-if="number > 0">{{number}}</div>
         <!-- 纯聊天状态 -->
         <div class="game-area__view--chat" ref="chatBox" v-if="status === 'game_00'">
@@ -42,7 +41,7 @@
                 </div>
             </div>
             <div class="game-area__operation__input">
-                <el-input type="textarea" v-model="text" @keyup.ctrl.enter.native="send"/>
+                <el-input type="textarea" v-model="text" :disabled="inputStatus" @keyup.ctrl.enter.native="send"/>
                 <div class="operation__input__button">
                     <el-button class="el-button__exit" @click="exit">退出</el-button>
                     <el-button @click="send" :disabled="inputStatus">发送</el-button>
@@ -110,7 +109,6 @@ export default {
                     this.number = this.number - 1;
                    if(this.number === 0 )  clearInterval(this.timer)
                 }, 1000)
-                this.$store.commit('setTime', false);
             }
         },
         question: {

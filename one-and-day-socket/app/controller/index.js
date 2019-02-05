@@ -145,6 +145,7 @@ module.exports = {
                 this.broadcast.emit('status', 'game_00');
                 clearInterval(timer1);
                 clearTimeout(timer2);
+                return;
             }
             this.emit('tip', this.user.nickname + ': ' + message);
             this.broadcast.emit('tip', this.user.nickname + ': ' + message);
@@ -200,6 +201,7 @@ module.exports = {
                     this.broadcast.emit('status', 'game_00');
                     clearInterval(timer1);
                     clearTimeout(timer2);
+                    return;
                 }
             }
             let msg = {

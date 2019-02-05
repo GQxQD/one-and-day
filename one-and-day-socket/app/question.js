@@ -1,12 +1,21 @@
-module.exports = [{
-    title: '每次挑战副本愤怒的石距需要多少体力？',
-    type: 'game_01',
-    answer: 'D',
-    img: '',
-    options: [
-        'A:12', 'B:20', 'C:30', 'D:45',
-    ],
-},
+module.exports = [
+    {
+        title: '（该题目不计分）请问大家想看会长女装吗？',
+        type: 'game_01',
+        img: '',
+        options: [
+            'A:想', 'B:超级想', 'C:说不想实际很想', 'D:没有一天不在想',
+        ],
+    },
+    {
+        title: '每次挑战副本愤怒的石距需要多少体力？',
+        type: 'game_01',
+        answer: 'D',
+        img: '',
+        options: [
+            'A:12', 'B:20', 'C:30', 'D:45',
+        ],
+    },
     {
         title: '全部用六星青吉鬼强化一个0级六星御魂到15级需要多少金币？',
         type: 'game_01',

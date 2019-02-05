@@ -1,6 +1,6 @@
 <template>
     <div class="game-area">
-        <div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>
+        <!--<div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>-->
         <div class="game-area__time primary-color" v-if="number > 0">{{number}}</div>
         <!-- 纯聊天状态 -->
         <div class="game-area__view--chat" ref="chatBox" v-if="status === 'game_00'">
@@ -33,7 +33,7 @@
                     <el-button class="primary-color-red" @click="changePrimary('red')">新年红</el-button>
                     <el-button class="primary-color-purple" @click="changePrimary('purple')">基佬紫</el-button>
                 </div>
-                <div class="game-area__operation__select" v-show="hasSelect">
+                <div class="game-area__operation__select">
                     <el-button v-for="(action,index) in this.operation" :key="index"
                                @click="operationSelect(action.key)"
                                :disabled="buttonStatus">
@@ -60,7 +60,7 @@ export default {
             // 倒计时数字
             number: 0,
             // 已选择答案
-            hasSelect: true,
+            hasSelect: false,
             // 输入文字
             text: '',
             operation: {},
@@ -100,49 +100,54 @@ export default {
         };
     },
     watch: {
-        tips(val) {
-            if (val) {
-                setTimeout(() => {
-                    this.$store.commit('setTips', '');
-                    // this.tipsMessage = ''
-                }, 5000);
-            }
-        },
+        // tips(val) {
+        //     if (val) {
+        //         setTimeout(() => {
+        //             this.$store.commit('setTips', '');
+        //             // this.tipsMessage = ''
+        //         }, 5000);
+        //     }
+        // },
         question: {
-            handler: () => {
-                this.hasSelect = true;
+            handler() {
+                this.hasSelect = false;
                 this.countDown(10);
             },
             deep: true,
         },
         messageList: {
-            handler () {
-                this.$nextTick(()=>{
-                    if(this.$refs.chatBox) {
+            handler() {
+                this.$nextTick(() => {
+                    if (this.$refs.chatBox) {
                         this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
-                        console.log("refs", this.$refs.chatBox.scrollHeight)
+                        console.log('refs', this.$refs.chatBox.scrollHeight);
                     }
-                })
+                });
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
     computed: {
         ...mapState({
             status: state => state.status,
             isManager: state => state.isManager,
             userName: state => state.userName,
-            tips: state => state.tips,
+            // tips: state => state.tips,
             question: state => state.question,
         }),
         inputStatus() {
             return !(this.isManager || ['game_00', 'game_02', 'game_03', 'game_04'].includes(this.status));
         },
         buttonStatus() {
-            return !(this.isManager || ['game_01', 'game_04'].includes(this.status));
+            //  管理员 永远打开
+            if (this.isManager) return false;
+            // 选择题状态下 切还没有进行选择
+            if (['game_01', 'game_04'].includes(this.status) && !this.hasSelect) return false;
+            // 其余状态
+            return true;
+            // return !(this.isManager || ['game_01', 'game_04'].includes(this.status));
         },
         messageList() {
-            
             return this.$store.state.messageList;
         },
     },
@@ -178,7 +183,7 @@ export default {
         },
         // 发送答案
         sendAnswer(answer) {
-            this.hasSelect = false;
+            this.hasSelect = true;
             this.socket.emit('answer', answer);
         },
         // 点击发送事件

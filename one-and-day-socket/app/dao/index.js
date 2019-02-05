@@ -21,4 +21,13 @@ module.exports = {
     setStatus(status) {
         return redis.set('status', status);
     },
+    setScore(score) {
+        return redis.hset('score', score);
+    },
+    getScore(nickname) {
+        return redis.hget('score', nickname);
+    },
+    getScores() {
+        return redis.hgetall('score');
+    },
 };

@@ -18,10 +18,14 @@
 </template>
 <script>
 export default {
+    created() {
+        this.name = window.localStorage.getItem('name');
+        this.password = window.localStorage.getItem('password');
+    },
     data() {
         return {
-            name: '柯灰',
-            password: '510641',
+            name: '',
+            password: '',
         };
     },
     methods: {
@@ -29,6 +33,8 @@ export default {
             this.socket.emit('login', { nickname: this.name, password: this.password }, (res) => {
                 console.log("前端登录", res);
                 if (res && res.code === 0) {
+                    window.localStorage.setItem('name', this.name);
+                    window.localStorage.setItem('password', this.password);
                     // 设置是否是管理员变量
                     this.$store.commit('setIsManager', res.data.isManager);
                     // 设置当前用户名

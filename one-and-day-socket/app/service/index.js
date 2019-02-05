@@ -3,7 +3,7 @@ const dao = require('../dao');
 
 module.exports = {
     async login(nickname, password) {
-        console.log(nickname, password)
+        console.log(nickname, password);
         if (nickname && password) {
             let user = await dao.getUserByNickname(nickname);
             if (user) {
@@ -30,13 +30,24 @@ module.exports = {
     },
     async getMemberList() {
         let list = await dao.getMemberList();
+        let scores = await dao.getScores();
+        console.log('scores', scores);
         let arr = [];
         for (let key in list) {
             if (list.hasOwnProperty(key)) {
-                arr.push(list[key]);
+                let nickname = list[key];
+                arr.push(nickname);
             }
         }
-        return [...new Set(arr)];
+        arr = [...new Set(arr)];
+        arr = arr.map(nickname => {
+            return {
+                nickname,
+                score: scores[nickname] || 0,
+            };
+        });
+        arr = arr.sort((a, b) => b.score - a.score);
+        return arr;
     },
     async checkAuth(token) {
         return await dao.checkAuth(token);
@@ -51,6 +62,18 @@ module.exports = {
 
     async setStatus(status) {
         return await dao.setStatus(status);
+    },
+
+    async addScore(nickname, score) {
+        let data = await dao.getScore(nickname);
+        console.log('score: ', data);
+        if (data) {
+            data = data - 0 + score - 0;
+        } else {
+            data = score - 0;
+        }
+        let res = await dao.setScore({ [nickname]: data });
+        return res;
     },
 
     // 发送消息

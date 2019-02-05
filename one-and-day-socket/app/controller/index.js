@@ -19,8 +19,11 @@ function failure(message = '', code = -1) {
 
 let timer1 = null;
 let timer2 = null;
-let currentIndex = 0;
+let currentIndex = -1;
+// 问题延迟时间
 const questionDelay = 5000;
+// 问题分数
+const questionScore = 1;
 const questionLength = 5; // questions.length;
 
 module.exports = {
@@ -57,19 +60,28 @@ module.exports = {
             this.broadcast.emit('status', status);
             if (status === 'game_01') {
                 this.emit('tip', '5s后开始选择题');
+                this.broadcast.emit('tip', '5s后开始选择题');
+                clearInterval(timer1);
+                clearTimeout(timer2);
                 setTimeout(() => {
                     this.emit('tip', '开始选择题');
-                    currentIndex = 0;
+                    this.broadcast.emit('tip', '开始选择题');
+                    currentIndex = -1;
                     timer1 = setInterval(() => {
-                        this.emit('question', questions[currentIndex]);
                         currentIndex++;
+                        // 当 结束的时候
                         if (currentIndex >= questionLength) {
                             clearInterval(timer1);
-                            timer2 = setTimeout(() => {
-                                this.emit('tip', '结束答题');
-                                clearTimeout(timer2);
-                            }, questionDelay);
+                            this.emit('tip', '结束答题');
+                            this.broadcast.emit('tip', '结束答题');
+                            service.setStatus('game_00');
+                            this.emit('status', 'game_00');
+                            this.broadcast.emit('status', 'game_00');
+                            return;
                         }
+                        let question = { ...questions[currentIndex], answer: '' };
+                        this.emit('question', question);
+                        this.broadcast.emit('question', question);
                     }, questionDelay);
                     // 防止错乱
                     setTimeout(() => {
@@ -92,6 +104,37 @@ module.exports = {
         } else {
             this.emit('logout');
         }
+    },
+
+    async answer(a) {
+        if (!this.user) {
+            this.emit('logout');
+            return;
+        }
+        if (currentIndex < 0) {
+            this.emit('tip', '还没开始呢');
+            return;
+        }
+        // if (this.a) {
+        //     this.emit('tip', '已经过了');
+        //     return;
+        // }
+        // this.a = a;
+        let question = questions[currentIndex];
+        console.log(question);
+        if (question.answer) {
+            const result = question.answer === a;
+            if (result) {
+                await service.addScore(this.user.nickname, questionScore);
+                let members = await service.getMemberList();
+                this.emit('members', members);
+                this.broadcast.emit('members', members);
+            }
+            this.emit('tip', `你选了 ${a}，${result ? '答对了' : ('答错了，正确答案是' + question.answer)}`);
+        } else {
+            this.emit('tip', '该题没有确定答案');
+        }
+        console.log(a);
     },
 
     async checkAuth(cb = () => undefined) {

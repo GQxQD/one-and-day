@@ -2,7 +2,7 @@
     <div class="member-list primaryback-ground">
         <div class="member-list__item" v-for="(user,index) in memberList" :key="index">
             <div class="point-green"></div>
-            <span>{{user}}</span>
+            <span>{{user.nickname}} [{{user.score || 0}}]</span>
         </div>
     </div>
 </template>

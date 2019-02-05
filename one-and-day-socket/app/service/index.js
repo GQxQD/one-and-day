@@ -3,6 +3,7 @@ const dao = require('../dao');
 
 module.exports = {
     async login(nickname, password) {
+        console.log(nickname, password)
         if (nickname && password) {
             let user = await dao.getUserByNickname(nickname);
             if (user) {

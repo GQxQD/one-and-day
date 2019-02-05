@@ -110,7 +110,7 @@ export default {
                     this.number = this.number - 1;
                    if(this.number === 0 )  clearInterval(this.timer)
                 }, 1000)
-                this.store.commit('setTime', false);
+                this.$store.commit('setTime', false);
             }
         },
         question: {
@@ -161,7 +161,6 @@ export default {
         this.operation = this.isManager ? this.ADMIN_ACTION : this.MEMBER_ACTION;
     },
     methods: {
-    
         // 点击退出
         exit() {
             window.localStorage.clear();

@@ -7,7 +7,7 @@
                     <el-input v-model="name" placeholder="名号"></el-input>
                 </div>
                 <div class="text-input">
-                    <el-input placeholder="咒令" type="password" v-model="password"></el-input>
+                    <el-input placeholder="咒令" type="password" v-model="password" @keyup.enter.native="login"></el-input>
                 </div>
             </div>
             <div class="login__box__button">

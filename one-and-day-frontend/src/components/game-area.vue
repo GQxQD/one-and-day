@@ -3,7 +3,7 @@
         <div class="game-area__tips primaryback-ground" v-if="tips"><i class="el-icon-bell"></i> {{tips}}</div>
         <div class="game-area__time primary-color" v-if="number > 0">{{number}}</div>
         <!-- 纯聊天状态 -->
-        <div class="game-area__view--chat" v-if="status === 'game_00'">
+        <div class="game-area__view--chat" ref="chatBox" v-if="status === 'game_00'">
             <div v-for="(msg,index) in messageList" :key="index"
                  :class="msg.isMy? 'game-area__view__item--my-self' : 'game-area__view__item'">
                 <div class="item__name">
@@ -22,10 +22,6 @@
                 <div class="option"
                      v-for="(item, index) in question.options" :key="index">{{item}}
                 </div>
-                <!--<div class="option">A.{{question.options.A}}</div>-->
-                <!--<div class="option">B.{{question.options.B}}</div>-->
-                <!--<div class="option">C.{{question.options.C}}</div>-->
-                <!--<div class="option">D.{{question.options.D}}</div>-->
             </div>
             <!-- 简答题 抠图题 -->
             <div class="picture_question" v-else><img :src="question.img" alt=""></div>
@@ -46,7 +42,7 @@
                 </div>
             </div>
             <div class="game-area__operation__input">
-                <el-input type="textarea" v-model="text"/>
+                <el-input type="textarea" v-model="text" @keyup.ctrl.enter.native="send"/>
                 <div class="operation__input__button">
                     <el-button class="el-button__exit" @click="exit">退出</el-button>
                     <el-button @click="send" :disabled="inputStatus">发送</el-button>
@@ -119,6 +115,17 @@ export default {
             },
             deep: true,
         },
+        messageList: {
+            handler () {
+                this.$nextTick(()=>{
+                    if(this.$refs.chatBox) {
+                        this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+                        console.log("refs", this.$refs.chatBox.scrollHeight)
+                    }
+                })
+            },
+            deep: true
+        }
     },
     computed: {
         ...mapState({
@@ -135,6 +142,7 @@ export default {
             return !(this.isManager || ['game_01', 'game_04'].includes(this.status));
         },
         messageList() {
+            
             return this.$store.state.messageList;
         },
     },

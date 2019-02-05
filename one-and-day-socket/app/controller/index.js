@@ -21,10 +21,10 @@ let timer1 = null;
 let timer2 = null;
 let currentIndex = -1;
 // 问题延迟时间
-const questionDelay = 5000;
+const questionDelay = 10000;
 // 问题分数
 const questionScore = 1;
-const questionLength = 5; // questions.length;
+const questionLength = questions.length;
 
 module.exports = {
 
@@ -135,6 +135,13 @@ module.exports = {
             this.emit('tip', '该题没有确定答案');
         }
         console.log(a);
+    },
+
+    tip(message) {
+        if (this.user) {
+            this.emit('tip', this.user.nickname + ': ' + message);
+            this.broadcast.emit('tip', this.user.nickname + ': ' + message);
+        }
     },
 
     async checkAuth(cb = () => undefined) {

@@ -161,11 +161,7 @@ export default {
         this.operation = this.isManager ? this.ADMIN_ACTION : this.MEMBER_ACTION;
     },
     methods: {
-        // 倒计时
-        countDown() {
-            if()
-        },
-        decreaseNumber
+    
         // 点击退出
         exit() {
             window.localStorage.clear();
